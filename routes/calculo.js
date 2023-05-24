@@ -1,16 +1,44 @@
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
 
+
+// Retorna todos os Calculos
 router.get('/', (req, res, next) => {
     res.status(200).send({
-        mensagem: 'Usando o GET dentro da rota de calculo'
+        mensagem: 'Retorna todos os calculos'
     })
 })
 
+// Insere um Calculo
 router.post('/', (req, res, next) => {
     res.status(201).send({
-        mensagem: 'Usando o POST dentro da rota de calculo'
+        mensagem: 'Insere um Calculo'
     })
 })
 
-modeule.exports = router
+// Retorna os dados de um calculo
+router.get('/:id', (req, res, next) => {
+    const id = req.params.id
+ 
+     res.status(200).send({
+        id: id,
+        mensagem: 'Você passou um ID'
+    })   
+})
+
+// ALTERA UM CALCULO
+router.patch('/', (req, res, next) => {
+    res.status(201).send({
+        mensagem: 'Calculo Alterado'
+    })
+})
+
+// EXCLUI UM CALCULO
+router.delete('/', (req, res, next) => {
+    res.status(201).send({
+        mensagem: 'Calculo Excluído'
+    })
+})
+
+
+module.exports = router;
