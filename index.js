@@ -31,3 +31,8 @@ console.log(`Área útil nescessária: ${resultado.areaUtil}m²`);
 
 
 
+
+export function descobrindoValores(descobrindoValores)
+
+
+
