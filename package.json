@@ -1,24 +1,21 @@
 {
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "mysql2": "^3.3.2",
+    "sequelize": "^6.31.1"
+  },
   "name": "rest-api",
   "version": "1.0.0",
-  "description": "Teste de Rest API para case Técnico da Holu",
+  "description": "Criando API do desafio Holu Back-End",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/thiagoribeiro2003/case_holu_thiagoribeiro.git"
+    "start": "node index.js"
   },
   "author": "Thiago Ribeiro Lopes da Silva",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/thiagoribeiro2003/case_holu_thiagoribeiro/issues"
-  },
-  "homepage": "https://github.com/thiagoribeiro2003/case_holu_thiagoribeiro#readme",
-  "dependencies": {
-    "express": "^4.18.2",
+  "devDependencies": {
     "nodemon": "^2.0.22"
   }
 }
