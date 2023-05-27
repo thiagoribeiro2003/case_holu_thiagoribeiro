@@ -60,7 +60,7 @@ app.post("/calculo", (req, res) => {
       );
       const quantidadeColunas = Math.ceil(quantidadeDePaineis / 2);
       const comprimentoDaEstrutura = quantidadeColunas * larguraPainel;
-      const alturaDaEstrutura = 2 * comprimentoDaEstrutura;
+      const alturaDaEstrutura = 2 * alturaPainel;
       const areaUtil = comprimentoDaEstrutura * alturaDaEstrutura;
 
       // Inserir os valores calculados na tabela "resultados"
