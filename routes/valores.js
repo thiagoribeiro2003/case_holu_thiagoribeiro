@@ -25,19 +25,19 @@ app.get("/calculo", (req, res) => {
 app.post("/calculo", (req, res) => {
   const {
     potenciaTotalParametroKw,
-    potenciaTotalPainel,
+    potenciaTotalPainelW,
     alturaPainel,
     larguraPainel,
     maximoPainelPorMicroInversor,
   } = req.body;
 
   const query =
-    "INSERT INTO valores (potenciaTotalParametroKw, potenciaTotalPainel, alturaPainel, larguraPainel, maximoPainelPorMicroInversor) VALUES (?, ?, ?, ?, ?)";
+    "INSERT INTO valores (potenciaTotalParametroKw, potenciaTotalPainelW, alturaPainel, larguraPainel, maximoPainelPorMicroInversor) VALUES (?, ?, ?, ?, ?)";
   conexao.query(
     query,
     [
       potenciaTotalParametroKw,
-      potenciaTotalPainel,
+      potenciaTotalPainelW,
       alturaPainel,
       larguraPainel,
       maximoPainelPorMicroInversor,
@@ -53,7 +53,7 @@ app.post("/calculo", (req, res) => {
 
       // Calcular os valores adicionais
       const quantidadeDePaineis = Math.ceil(
-        (potenciaTotalParametroKw * 1000) / potenciaTotalPainel
+        (potenciaTotalParametroKw * 1000) / potenciaTotalPainelW
       );
       const quantidadeMicroInversores = Math.ceil(
         quantidadeDePaineis / maximoPainelPorMicroInversor
@@ -65,7 +65,7 @@ app.post("/calculo", (req, res) => {
 
       // Inserir os valores calculados na tabela "resultados"
       const resultadosQuery =
-        "INSERT INTO resultados (id_resultados, quantidadeDePaineis, quantidadeMicroInversores, quantidadeColunas, comprimentoDaEstrutura, alturaDaEstrutura, areaUtil) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        "INSERT INTO resultados (id_valores, quantidadeDePaineis, quantidadeMicroInversores, quantidadeColunas, comprimentoDaEstrutura, alturaDaEstrutura, areaUtil) VALUES (?,?,?,?,?,?,?)";
       conexao.query(
         resultadosQuery,
         [
