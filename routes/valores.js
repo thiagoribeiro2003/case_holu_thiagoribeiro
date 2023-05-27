@@ -65,7 +65,7 @@ app.post("/calculo", (req, res) => {
 
       // Inserir os valores calculados na tabela "resultados"
       const resultadosQuery =
-        "INSERT INTO resultados (id_valores, quantidadeDePaineis, quantidadeMicroInversores, quantidadeColunas, comprimentoDaEstrutura, alturaDaEstrutura, areaUtil) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        "INSERT INTO resultados (id_resultados, quantidadeDePaineis, quantidadeMicroInversores, quantidadeColunas, comprimentoDaEstrutura, alturaDaEstrutura, areaUtil) VALUES (?, ?, ?, ?, ?, ?, ?)";
       conexao.query(
         resultadosQuery,
         [
