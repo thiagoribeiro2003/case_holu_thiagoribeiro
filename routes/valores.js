@@ -1,77 +1,96 @@
-const mysql = require('../banco')
-//const express = require('express');
+const express = require('express');
+const conexao = require('../banco');
+const app = express();
+
+/* configurando suporte ao formato json */
+app.use(express.json());
 
 
-function ler(res){
-    const sql = "SELECT * FROM valores";
-    
-    /* conectando ao Banco de Dados */
-    conexao.query(sql,(erro, resultados)=>{
-        if(resultados.length === 0){
-            res.status(204).end(); /* 204 = sem conteudo. O método .end()para qualquer aplicação*/
-            return; /* die() */
+
+// Consulta todos os valores
+app.get("/calculo", (req, res) => {
+    conexao.query("SELECT * FROM valores", (err, results) => {
+        if(err) {
+            console.log("Erro ao executar a consulta:", err);
+            res.status(500).json({ error: "Erro ao consultar registros"})
+            return
         }
-        if(erro){
-            res.status(400).json(erro.code); /* 400 = bad request, requisição inválida*/
-        }else{
-            res.status(200).json(resultados); /*  deu certo */
-        }
+        res.json(results)
     })
-    }
-    /* inserindo valores */
-    function inserir(valores,res){
-        /* inserir dados via node muda a forma do sql adicionando o set e um caracter coringa  ? */
-    const sql = "INSERT INTO valores (potenciaTotalParametroKw, potenciaTotalPainelW, alturaPainel, larguraPainel, maximoPainelPorMicroInversor) VALUES (?,?,?,?,?)";
-    
-    conexao.query(sql,valores,(erro)=>{
-        
-        if(erro){
-            res.status(400).json(erro.code);
-        }else{
-            res.status(201).json({"status": "valores inseridos!"});
+  })
+
+
+// Inserção de valores e cálculo dos resultados
+
+app.post("/calculo", (req, res) => {
+  const {
+    potenciaTotalParametroKw,
+    potenciaTotalPainel,
+    alturaPainel,
+    larguraPainel,
+    maximoPainelPorMicroInversor,
+  } = req.body;
+
+  const query =
+    "INSERT INTO valores (potenciaTotalParametroKw, potenciaTotalPainel, alturaPainel, larguraPainel, maximoPainelPorMicroInversor) VALUES (?, ?, ?, ?, ?)";
+  conexao.query(
+    query,
+    [
+      potenciaTotalParametroKw,
+      potenciaTotalPainel,
+      alturaPainel,
+      larguraPainel,
+      maximoPainelPorMicroInversor,
+    ],
+    (err, result) => {
+      if (err) {
+        console.error("Erro ao inserir valores:", err);
+        res.status(500).json({ error: "Erro ao inserir valores" });
+        return;
+      }
+
+      const id_valores = result.insertId;
+
+      // Calcular os valores adicionais
+      const quantidadeDePaineis = Math.ceil(
+        (potenciaTotalParametroKw * 1000) / potenciaTotalPainel
+      );
+      const quantidadeMicroInversores = Math.ceil(
+        quantidadeDePaineis / maximoPainelPorMicroInversor
+      );
+      const quantidadeColunas = Math.ceil(quantidadeDePaineis / 2);
+      const comprimentoDaEstrutura = quantidadeColunas * larguraPainel;
+      const alturaDaEstrutura = 2 * comprimentoDaEstrutura;
+      const areaUtil = comprimentoDaEstrutura * alturaDaEstrutura;
+
+      // Inserir os valores calculados na tabela "resultados"
+      const resultadosQuery =
+        "INSERT INTO resultados (id_valores, quantidadeDePaineis, quantidadeMicroInversores, quantidadeColunas, comprimentoDaEstrutura, alturaDaEstrutura, areaUtil) VALUES (?, ?, ?, ?, ?, ?, ?)";
+      conexao.query(
+        resultadosQuery,
+        [
+          id_valores,
+          quantidadeDePaineis,
+          quantidadeMicroInversores,
+          quantidadeColunas,
+          comprimentoDaEstrutura,
+          alturaDaEstrutura,
+          areaUtil,
+        ],
+        (err, result) => {
+          if (err) {
+            console.error("Erro ao inserir resultados:", err);
+            res.status(500).json({ error: "Erro ao inserir resultados" });
+            return;
+          }
+          res
+            .status(201)
+            .json({ message: "Valores e resultados inseridos com sucesso" });
         }
-    })
+      );
     }
-    function lerUm(id,res){
-        const sql = "SELECT * FROM valores WHERE id_valores = ?";
-        conexao.query(sql,id,(erro,resultados)=>{
-            if(resultados.lenght === 0){
-                res.status(204).end();
-            }
-            if(erro){
-                res.status(400).json(erro.code);
-            }else{
-                res.status(200).json(resultados[0]);
-            }
-        })
-    }
-    function atualizar(id, valores, res){
-        const sql = "UPDATE valores SET ? WHERE id_valores = ?";
-        /* a ordem importa por conta do sql, primeiro pega dados dos valores dps o id */
-        conexao.query(sql,[valores, id],(erro,resultados)=>{
-            if(erro){
-                res.status(400).json(erro.code);
-            }else{/* 
-                res.status(200).json({"status":"atualizado com sucesso!"}); */
-                /* spread operator(operador de 'espalhamento' de objeto) */
-                res.status(200).json({...valores,id});
-    
-            }
-            
-        });
-    }
-    function excluir(id, res){
-        const sql = "DELETE FROM valores WHERE id_valores = ?";
-    
-        conexao.query(sql, id, (erro,resultados)=>{
-            if(erro){
-                res.status(400).json(erro.code);
-            }else{    
-             res.status(200).json({"status" : "valores excluídos",id});
-            }
-        });
-    }
-    module.exports = {ler,inserir, lerUm, atualizar, excluir};
+  );
+});
 
 
 
@@ -80,174 +99,41 @@ function ler(res){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//const router = express.Router()
-
+/* configurando o servidor */
+app.listen(3000, () => {
+  console.log("Servidor Express iniciado na porta 3000");
+});
 
 
 /*
-// Retorna todos os calculos
-router.get('/', (req, res, next) => {
-    res.status(200).send({
-        mensagem: "Retorna todos os calculo"
-    });
-});
+const potenciaTotalParametroKw = 4.5;
+const potenciaTotalPainelW = 550;
+const alturaPainel = 1.95;
+const larguraPainel = 1.1;
+const maximoPainelPorMicroInversor = 4;
 
-// Insere um Calculo
-router.post('/', (req, res, next) => {
+function descobrindoValores(potenciaTotalParametroKw){
+  const quantidadeDePaineis = Math.ceil(potenciaTotalParametroKw * 1000 / potenciaTotalPainelW);
+  const quantidadeMicroInversores =  Math.ceil(quantidadeDePaineis / maximoPainelPorMicroInversor);
+  const quantidadeDeColunas = Math.ceil(quantidadeDePaineis / 2);                          
+  const comprimentoDaEstrutura = quantidadeDeColunas * larguraPainel;
+  const alturaDaEstrutura = 2 * alturaPainel; // 2 - Quantidade de linhas (pois será uma linha com 5 paineis e outra com 4 paineis)
+  const areaUtil = comprimentoDaEstrutura * alturaDaEstrutura
 
-    const calculo = {
-        potenciaTotalParametroKw: req.body.potenciaTotalParametroKw,
-        potenciaTotalPainelW: req.body.potenciaTotalPainelW,
-        alturaPainel: req.body.alturaPainel,
-        larguraPainel: req.body.larguraPainel,
-        maximoPainelPorMicroInversor: req.body.maximoPainelPorMicroInversor
-    }
+  return{
+    quantidadeDePaineis,
+    quantidadeMicroInversores,
+    quantidadeDeColunas,
+    comprimentoDaEstrutura,
+    alturaDaEstrutura,
+    areaUtil
+  } 
+}
 
-   
+const resultado = descobrindoValores(potenciaTotalParametroKw);
 
-    mysql.getConnection((error, conn) => {
-        conn.query(
-            'INSERT INTO valores (potenciaTotalParametroKw, potenciaTotalPainelW, alturaPainel, larguraPainel, maximoPainelPorMicroInversor) VALUES(?,?,?,?,?)',
-            [
-                req.body.potenciaTotalParametroKw,
-                req.body.potenciaTotalPainelW,
-                req.body.alturaPainel,
-                req.body.larguraPainel,
-                req.body.maximoPainelPorMicroInversor
-            ],
-            (error, resultado, field) => {
-                conn.release()
-
-                if(error){
-                    res.status(500).send({
-                        error: error,
-                        response: null
-                    })
-                }
-                res.status(201).send({
-                    mensagem: "Valores inseridos com sucesso",
-                    id: resultado.insertId                
-                })
-            }
-        )
-    })
-
-
-    // res.status(201).send({
-    //     mensagem: "Insere um calculo",
-    //     calculoCriado: calculo
-    // })
-})
-
-
-
-
-// Insere um Calculo
-router.post('/resultados', (req, res, next) => {
-  
-    const resultado = {
-        quantidadeDePaineis: req.body.quantidadeDePaineis,
-        quantidadeMicroInversores: req.body.quantidadeMicroInversores,
-        quantidadeDeColunas: req.body.quantidadeMicroInversores,
-        comprimentoDaEstrutura: req.body.comprimentoDaEstrutura,
-        alturaDaEstrutura: req.body.comprimentoDaEstrutura,
-        areaUtil: req.body.areaUtil
-    }
-
-    res.status(201).send({
-        mensagem: "Insere um calculo",
-        resultadoCriado: resultado
-    })
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Retorna os dados de um Calculo
-router.get('/:id', (req, res, next) => {
-    const id = req.params.id
-    res.status(200).send({
-        id: id,
-        mensagem: 'Usando o GET de um calculo específico'
-        
-    })
-})
-
-// Atualiza os dados de um Calculo
-router.patch('/:id', (req, res, next) => {
-    res.status(201).send({
-        mensagem: "Usando o PATCH dentro da rota de calculo"
-    });
-});
-
-router.delete('/', (req, res, next) => {
-    res.status(201).send({
-        mensagem: "Usando o DELETE dentro da rota de calculo"
-    });
-});
-
-connection.end();
-
-module.exports = router
+console.log(`Quantidade de painéis necessários: ${resultado.quantidadeDePaineis}`);
+console.log(`Quantidade de micro inversores necessários: ${resultado.quantidadeMicroInversores}`);
+console.log(`Comprimento da estrutura necessária: ${resultado.comprimentoDaEstrutura}m`);
+console.log(`Área útil nescessária: ${resultado.areaUtil}m²`);
 */

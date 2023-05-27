@@ -8,10 +8,10 @@
   "name": "rest-api",
   "version": "1.0.0",
   "description": "Criando API do desafio Holu Back-End",
-  "main": "index.js",
+  "main": "banco.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node banco.js"
   },
   "author": "Thiago Ribeiro Lopes da Silva",
   "license": "ISC",
