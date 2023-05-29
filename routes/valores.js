@@ -11,7 +11,7 @@ app.use(express.json());
 // Consulta todos os valores e resultados
 app.get("/calculo", (req, res) => {
   const query = `
-    SELECT valores.*, resultados.*
+    SELECT valores.*, resultados.quantidadeDePaineis, resultados.quantidadeMicroInversores, resultados.comprimentoDaEstrutura, resultados.areaUtil 
     FROM valores
     JOIN resultados ON valores.id = resultados.id
   `;
@@ -52,7 +52,7 @@ app.get("/calculo/:id", (req, res) => {
   const id = req.params.id;
 
   const query = `
-    SELECT valores.*, resultados.*
+    SELECT valores.*, resultados.quantidadeDePaineis, resultados.quantidadeMicroInversores, resultados.comprimentoDaEstrutura, resultados.areaUtil 
     FROM valores
     JOIN resultados ON valores.id = resultados.id
     WHERE valores.id = ?
