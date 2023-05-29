@@ -5,6 +5,10 @@ const app = express();
 /* configurando suporte ao formato json */
 app.use(express.json());
 
+// Rota 404 para lidar com qualquer outra rota
+app.use((req, res) => {
+  res.status(404).json({ error: "Rota não encontrada" });
+});
 
 /*              VALORES        */
 
@@ -309,6 +313,7 @@ app.delete("/calculo/:id", (req, res) => {
     });
   });
 });
+
 
 /* configurando o servidor */
 app.listen(3000, () => {
