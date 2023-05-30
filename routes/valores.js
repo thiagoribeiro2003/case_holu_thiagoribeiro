@@ -7,7 +7,7 @@ app.use(express.json());
 
 // Rota 404 para lidar com qualquer outra rota que não seja /calculo
 app.use((req, res) => {
-  res.status(404).json({ error: "Rota não encontrada" });
+  res.status(404).json({ erro: "Rota não encontrada" });
 });
 
 // Consulta todos os valores e resultados
