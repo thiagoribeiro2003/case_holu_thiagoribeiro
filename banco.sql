@@ -1,7 +1,7 @@
 CREATE DATABASE desafio_holu;
 
 CREATE TABLE valores (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
   potenciaTotalParametroKw FLOAT NOT NULL,
   potenciaTotalPainel FLOAT NOT NULL,
   alturaPainel FLOAT NOT NULL,
