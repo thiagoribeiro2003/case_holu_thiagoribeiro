@@ -1,6 +1,6 @@
 # README
 
-Este é um exemplo de aplicativo Express.js que realiza consultas em um banco de dados e realiza cálculos com base nos valores inseridos.
+Este é um exemplo de aplicativo Express.js que realiza inserções e consultas em um banco de dados e realiza cálculos com base nos valores inseridos.
 
 ## Instalação
 
@@ -11,7 +11,8 @@ Este é um exemplo de aplicativo Express.js que realiza consultas em um banco de
 ## Configuração do Banco de Dados
 
 1. Certifique-se de ter um banco de dados MySQL configurado.
-2. No arquivo `banco.js`, configure as informações de conexão com o seu banco de dados.
+2. No arquivo `banco.sql`, possui o código SQL para a criação do banco de dados.
+3. No arquivo `banco.js`, configure as informações de conexão com o seu banco de dados.
 
 ## Uso
 
@@ -21,51 +22,44 @@ Este é um exemplo de aplicativo Express.js que realiza consultas em um banco de
 
 ## Rotas Disponíveis
 
-### GET /api/valores
-
-- Descrição: Retorna todos os valores da tabela "valores".
-- Resposta: Array JSON com os valores encontrados.
-
-### GET /api/resultados
-
-- Descrição: Retorna todos os resultados da tabela "resultados".
-- Resposta: Array JSON com os resultados encontrados.
-
-### GET /api/todosValores
+### GET /calculo
 
 - Descrição: Retorna uma combinação dos valores e resultados, unindo as tabelas "valores" e "resultados" com base no campo "id".
-- Resposta: JSON com as propriedades "values" e "calculations" contendo os valores e resultados, respectivamente.
+- Resposta: Array JSON com os valores e resultados encontrados.
 
-### POST /api/valores
+### GET /calculo/:id
+
+- Descrição: Consulta "valores" e "resultados" específicos com base no ID.
+- Resposta: Array JSON com os resultados encontrados.
+
+### POST /calculo
 
 - Descrição: Insere valores na tabela "valores" e realiza cálculos adicionais, inserindo os resultados na tabela "resultados".
 - Corpo da solicitação (JSON):
   - potenciaTotalParametroKw: Potência total do parâmetro em quilowatts.
-  - potenciaTotalPainel: Potência total do painel.
+  - potenciaTotalPainelW: Potência total do painel.
   - alturaPainel: Altura do painel.
   - larguraPainel: Largura do painel.
   - maximoPainelPorMicroInversor: Número máximo de painéis por microinversor.
 - Resposta: JSON com a mensagem "Valores e resultados inseridos com sucesso" em caso de sucesso.
 
+### PATCH /calculo/:id
+
+- Descrição: Altera os "valores" de um calculo e muda seus "resultados" com base num Id específico
+- Resposta: JSON com a mensagem "Valores e resultados atualizados com sucesso".
 ## Rotas do Insomnia
 
 As rotas a seguir podem ser importadas no Insomnia para testar as funcionalidades da API.
 
-### Valores
+### Calculo
 
-- **GET** Todos os Valores: `/api/valores`
-- **POST** Inserir Valores: `/api/valores`
-- **DELETE** Limpar Valores: `/api/valores`
+- **GET** Visualizar Todos os Valores e Seus Resultados: `/calculo`
+- **DELETE** Limpar Todos os Valores e Resultados: `/calculo`
 
-### Resultados
-
-- **GET** Todos os Resultados: `/api/resultados`
-- **POST** Inserir Resultados: `/api/resultados`
-- **DELETE** Limpar Resultados: `/api/resultados`
-
-### Todos Valores e Resultados
-
-- **GET** Todos Valores e Resultados: `/api/todosValores`
+- **GET** Visualizar valores e resultados específicos com base no Id: `/calculo/:id`
+- **POST** Inserir um ou mais valores: `/calculo/:id`
+- **PATCH** Alterar os valores de um calculo e muda seus resultados com base num Id específico.
+- **DELETE** Limpar um valor Específico e seus resultados com base no Id: `/calculo/:id`
 
 ## Contribuição
 
