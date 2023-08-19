@@ -47,6 +47,17 @@ Este é um exemplo de aplicativo Express.js que realiza inserções e consultas 
 
 - Descrição: Altera os "valores" de um calculo e muda seus "resultados" com base num Id específico
 - Resposta: JSON com a mensagem "Valores e resultados atualizados com sucesso".
+
+### DELETE /calculo
+
+- Descrição: Exclui todos os valores e resultados do banco de dados
+- Resposta: JSON com a mensagem "Registros excluídos com sucesso".
+
+### DELETE /calculo/:id
+
+- Descrição: Exclui um calculo expecífico (junto com seus resultados) com base no Id
+- Resposta: JSON com a mensagem "Registro excluído com sucesso".
+
 ## Rotas do Insomnia
 
 As rotas a seguir podem ser importadas no Insomnia para testar as funcionalidades da API.
