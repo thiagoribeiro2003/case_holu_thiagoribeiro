@@ -58,7 +58,7 @@ As rotas a seguir podem ser importadas no Insomnia para testar as funcionalidade
 #
 - **GET** Visualizar valores e resultados específicos com base no Id: `/calculo/:id`
 - **POST** Inserir um ou mais valores: `/calculo/:id`
-- **PATCH** Alterar os valores de um calculo e muda seus resultados com base num Id específico.
+- **PATCH** Alterar os valores de um calculo e muda seus resultados com base num Id específico: `/calculo/:id`
 - **DELETE** Limpar um valor Específico e seus resultados com base no Id: `/calculo/:id`
 #
 ## Contribuição
