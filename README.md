@@ -16,7 +16,7 @@ Este é um exemplo de aplicativo Express.js que realiza inserções e consultas 
 
 ## Uso
 
-1. Após a instalação e configuração, execute o comando `node src/valores.js` para iniciar o servidor.
+1. Após a instalação e configuração, execute o comando `node routes/valores.js` para iniciar o servidor.
 2. O servidor estará em execução na porta 3000.
 3. Use uma ferramenta de teste de API, como o Postman, para testar as rotas disponíveis.
 
